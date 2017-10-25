@@ -7,9 +7,9 @@ host: "localhost:8000"
 basePath: "/"
 tags:
 - name: "Goal"
-  description: "Access and update goals (individual and group)."
+  description: "Working with specific goals here."
 - name: "User"
-  description: "All of our beloved users are stored here."
+  description: "All of our beloved users and user-specific endpoints."
 # - name: "Message"
 #   description: "Smack-talk central! urgenC is not responsible for this content!"
 schemes:
@@ -21,7 +21,7 @@ securityDefinitions:
     in: header
 
 paths:
-  /goal:
+  /goals:
     post:
       security:
         - Bearer: []
@@ -56,48 +56,7 @@ paths:
             type: "string"
 
 
-  /goals/{userId}/findByStatus:
-    get:
-      security:
-        - Bearer: []
-      tags:
-      - "Goal"
-      summary: "Finds goals by status"
-      description: "All goals have a status relative to the logged in user"
-      operationId: "findGoalsByStatus"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "userId"
-        in: "path"
-        description: "UserId that determines what goals we get back"
-        required: true
-        type: "string"
-      - name: "status"
-        in: "query"
-        description: "Status value that determines what goals we get back"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Goal-res"
-        400:
-          description: "Invalid status value"
-        401:
-          description: "Unauthorized"
-          schema:
-            type: "string"
-        405:
-          description: "Invalid input"
-          schema:
-            type: "string"
-
-
-  /goal/{goalId}:
+  /goals/{goalId}:
     patch:
       security:
         - Bearer: []
@@ -137,8 +96,6 @@ paths:
           schema:
             type: "string"
 
-
-  /goals/{goalId}:
     delete:
       security:
         - Bearer: []
@@ -170,7 +127,7 @@ paths:
             type: "string"
 
 
-  /user:
+  /users:
     post:
       tags:
       - "User"
@@ -195,7 +152,7 @@ paths:
           description: "Invalid info supplied"
 
 
-  /user/token:
+  /users/token:
     post:
       tags:
       - "User"
@@ -224,22 +181,7 @@ paths:
           description: "Invalid username/password supplied"
 
 
-  /user/logout:
-    delete:
-      security:
-        - Bearer: []
-      tags:
-      - "User"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        default:
-          description: "successful operation"
-  /user/{userId}:
+  /users/{userId}:
     get:
       security:
         - Bearer: []
@@ -253,7 +195,7 @@ paths:
       parameters:
       - name: "userId"
         in: "path"
-        description: "The name of the user whose info we're accessing"
+        description: "The id of the user whose info we're accessing"
         required: true
         type: "string"
       responses:
@@ -335,6 +277,47 @@ paths:
             $ref: "#/definitions/User-res"
         404:
           description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /users/{userId}/usergoals:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Returns users' goals - optionally filtered by status (Success, Failure, Pending, Current, etc)"
+      description: "All goals have a status relative to the logged in user"
+      operationId: "findGoalsByStatus"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "UserId that determines what goals we get back"
+        required: true
+        type: "string"
+      - name: "status"
+        in: "query"
+        description: "Status value that determines what goals we get back"
+        required: false
+        type: "string"
+
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Goal-res"
+        400:
+          description: "Invalid status value"
+        401:
+          description: "Unauthorized"
           schema:
             type: "string"
         405:
