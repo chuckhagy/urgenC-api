@@ -42,7 +42,47 @@ paths:
         schema:
             $ref: "#/definitions/Goal-new-req"
       responses:
-        200:
+        201:
+          description: "Successful addition"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /goals/{goalId}/assignments:
+    post:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Add a new goal-user assignent to the system"
+      description: ""
+      operationId: "addAssignments"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "ID of goal that assignments relate to"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "individual goal assignment"
+        required: true
+        schema:
+            $ref: "#/definitions/assignments-create-req"
+      responses:
+        201:
           description: "Successful addition"
           schema:
             $ref: "#/definitions/Goal-res"
@@ -173,7 +213,7 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        201:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Login-token"
@@ -284,7 +324,7 @@ paths:
           schema:
             type: "string"
 
-  /users/{userId}/usergoals:
+  /users/{userId}/goal-assignments:
     get:
       security:
         - Bearer: []
@@ -470,3 +510,12 @@ definitions:
         type: "string"
       profileColor:
         type: "string"
+
+  assignments-create-req:
+    type: "object"
+    required:
+    - "userId"
+    properties:
+      userId:
+        type: "integer"
+        format: "int64"
