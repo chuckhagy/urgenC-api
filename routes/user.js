@@ -6,14 +6,12 @@ const usersController = require('../lib/instances/userController');
 router.get('/users', userController.getAll);
 router.post('/users', userController.create);
 router.get('/users/:userId', userController.getById);
+router.patch('/users/:userId', userController.updateById);
 
 
 
 
 
-router.patch('/users/:userId', (req, res, next) => {
-    res.status(200).send('Hello, I am running')
-});
 
 router.delete('/users/:userId', (req, res, next) => {
     res.status(200).send('Hello, I am running')
