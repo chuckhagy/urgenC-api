@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 
 const app  = express();
 const user = require('./routes/user');
+const authentication = require('./routes/authentication');
 
 //for dev purposes below
 app.get('/', (req, res) => {
@@ -14,7 +15,8 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json());
 
 app.use(user);
+app.use(authentication);
 
 app.listen(PORT, () => {
     console.log('Listening on ', PORT)
-});
+});``

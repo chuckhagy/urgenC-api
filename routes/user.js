@@ -3,13 +3,9 @@ const router = express.Router();
 const usersController = require('../lib/instances/userController');
 
 
-
+router.get('/users', userController.getAllUsers);
 router.post('/users', userController.create);
 
-
-router.post('/users/token', (req, res, next) => {
-    res.status(200).send('Hello, I am running')
-});
 
 router.get('/users/:userId', (req, res, next) => {
     res.status(200).send('Hello, I am running')
