@@ -3,13 +3,13 @@ const router = express.Router();
 const usersController = require('../lib/instances/userController');
 
 
-router.get('/users', userController.getAllUsers);
+router.get('/users', userController.getAll);
 router.post('/users', userController.create);
+router.get('/users/:userId', userController.getById);
 
 
-router.get('/users/:userId', (req, res, next) => {
-    res.status(200).send('Hello, I am running')
-});
+
+
 
 router.patch('/users/:userId', (req, res, next) => {
     res.status(200).send('Hello, I am running')
