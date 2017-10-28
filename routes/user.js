@@ -8,9 +8,8 @@ router.post('/users', userController.create);
 router.get('/users/:userId', userController.getById);
 router.patch('/users/:userId', userController.updateById);
 router.delete('/users/:userId', userController.deleteById);
+router.get('/goals/:goalId/user-assignments', userController.getUsersByAssignment)
 
-
-//get users attached to goal
 
 
 
