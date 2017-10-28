@@ -192,35 +192,6 @@ paths:
           description: "Invalid info supplied"
 
 
-  /users/token:
-    post:
-      tags:
-      - "User"
-      summary: "Log user in and send them back a token if successful"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "query"
-        description: "User's username"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login"
-        required: true
-        type: "string"
-      responses:
-        201:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Login-token"
-        400:
-          description: "Invalid username/password supplied"
-
-
   /users/{userId}:
     get:
       security:
@@ -364,6 +335,34 @@ paths:
           description: "Invalid input"
           schema:
             type: "string"
+
+  /token:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Log user in and send them back a token if successful"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "User's username"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Login-token"
+        400:
+          description: "Invalid username/password supplied"
 
 
 definitions:
