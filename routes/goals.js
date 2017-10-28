@@ -8,4 +8,7 @@ router.post('/goals', goalsController.create);
 router.patch('/goals/:goalId', goalsController.updateById);
 router.delete('/goals/:goalId', goalsController.deleteById);
 
+router.get('/users/:userId/goal-assignments', goalsController.getGoalsByAssignment);
+
+
 module.exports = router;
