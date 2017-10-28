@@ -3,8 +3,8 @@ const router = express.Router();
 const authenticationController = require('../lib/instances/authenticationController');
 
 
-router.post('/users/token', authenticationController.token);
-router.all('/users/token', (req, res, next) => {
+router.post('/token', authenticationController.token);
+router.all('/token', (req, res, next) => {
     res.status(405).send('Method Not Allowed')
 });
 
