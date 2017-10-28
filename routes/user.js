@@ -13,8 +13,18 @@ router.delete('/users/:userId', userController.deleteById);
 
 
 
+
+
 router.get('/users/:userId/goal-assignments', (req, res, next) => {
     res.status(200).send('Hello, I am running')
 });
+
+
+
+
+
+
+
+
 
 module.exports = router;
