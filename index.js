@@ -26,9 +26,6 @@ app.use((req, res, next) => {
     if(typeof authUserId === 'number' && authUserId > 0) {
         req.authenticatedUserId = authUserId;
     } else req.authenticatedUserId = null;
-    // console.log(req.authenticatedUserId);
-    // console.log(req.jwt);
-    console.log(req.jwt);
     next();
 });
 
