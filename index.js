@@ -7,6 +7,7 @@ const app  = express();
 
 const user = require('./routes/user');
 const goals = require('./routes/goals');
+const goalassignments = require('./routes/goalassignments');
 const authentication = require('./routes/authentication');
 
 app.use(bodyParser.json());
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 
 app.use(user);
 app.use(goals);
+app.use(goalassignments);
 app.use(authentication);
 
 app.all('*', (request, response, next) => {
