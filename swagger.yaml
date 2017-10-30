@@ -83,45 +83,7 @@ paths:
             type: "string"
 
 
-  /goals/{goalId}/assignments:
-    post:
-      security:
-        - Bearer: []
-      tags:
-      - "Goal"
-      summary: "Add a new goal-user assignent to the system"
-      description: ""
-      operationId: "addAssignments"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "goalId"
-        in: "path"
-        description: "ID of goal that assignments relate to"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: "body"
-        name: "body"
-        description: "individual goal assignment"
-        required: true
-        schema:
-            $ref: "#/definitions/assignments-create-req"
-      responses:
-        201:
-          description: "Successful addition"
-          schema:
-            $ref: "#/definitions/Goal-res"
-        401:
-          description: "Unauthorized"
-          schema:
-            type: "string"
-        405:
-          description: "Invalid input"
-          schema:
-            type: "string"
+
 
 
   /goals/{goalId}:
@@ -196,6 +158,29 @@ paths:
 
 
   /users:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Returns all users in system (admin only)"
+      description: ""
+      operationId: "getAllUsers"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "All users returned"
+          schema:
+            $ref: "#/definitions/User-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
     post:
       tags:
       - "User"
@@ -323,49 +308,11 @@ paths:
           schema:
             type: "string"
 
-  /users/{userId}/goal-assignments:
-    get:
-      security:
-        - Bearer: []
-      tags:
-      - "User"
-      summary: "Returns users' goals - optionally filtered by status (Success, Failure, Pending, Current, etc)"
-      description: "All goals have a status relative to the logged in user"
-      operationId: "findGoalsByStatus"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "userId"
-        in: "path"
-        description: "UserId that determines what goals we get back"
-        required: true
-        type: "string"
-      - name: "status"
-        in: "query"
-        description: "Status value that determines what goals we get back"
-        required: false
-        type: "string"
-
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Goal-res"
-        400:
-          description: "Invalid status value"
-        401:
-          description: "Unauthorized"
-          schema:
-            type: "string"
-        405:
-          description: "Invalid input"
-          schema:
-            type: "string"
 
   /token:
     post:
+      security:
+        - Bearer: []
       tags:
       - "Authentication"
       summary: "Log user in and send them back a token if successful"
@@ -393,6 +340,8 @@ paths:
           description: "Invalid username/password supplied"
   /goal-assignments:
     post:
+      security:
+        - Bearer: []
       tags:
       - "Goal-Assignments"
       summary: "Create a new assingment (defaults to pending)"
@@ -418,6 +367,142 @@ paths:
           description: "Invalid input"
           schema:
             type: "string"
+  /goal-assignments/user/{userId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all assignments for a given user"
+      description: "This can only be done by the user, while logged in."
+      operationId: "getUsersAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The userId that owns the requested assignments"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /goal-assignments/goal/{goalId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all USERS assigned to a specific goal"
+      description: "This can only be done by associated users, while logged in."
+      operationId: "getGoalAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "The goalId that we are interested in"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /goal-assignments/{assignmentId}:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Updates an existing goal assignment"
+      description: "Takes in an assignment ID as well as its new data"
+      operationId: "updateGoalAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "assignmentId"
+        in: "path"
+        description: "ID of goal assignemnt that we are updating"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Complete or partial goal assignment object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/newAssignment"
+      responses:
+        200:
+          description: "Successful update"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Deletes an existing goal assignment"
+      description: "Takes in an assignment ID"
+      operationId: "deleteGoalAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "assignmentId"
+        in: "path"
+        description: "ID of goal assignemnt that we are updating"
+        required: true
+        type: "integer"
+        format: "int64"
+
+      responses:
+        200:
+          description: "Successful update"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
 
 
 definitions:
