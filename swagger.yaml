@@ -311,8 +311,6 @@ paths:
 
   /token:
     post:
-      security:
-        - Bearer: []
       tags:
       - "Authentication"
       summary: "Log user in and send them back a token if successful"
