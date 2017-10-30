@@ -5,10 +5,10 @@ exports.up = function(knex, Promise) {
         table.specificType('username', 'char(32)').unique().notNullable();
         table.specificType('role', 'char(32)').defaultTo('basic').notNullable();
         table.specificType('hashedPassword', 'char(60)').notNullable();
-        table.specificType('displayName', 'char(32)').notNullable();
-        table.text('statusMessage');
+        table.specificType('displayName', 'char(32)').defaultTo('').notNullable();
+        table.text('statusMessage').defaultTo('Hi everyone!');
         table.specificType('email', 'char(60)').unique().notNullable();
-        table.specificType('profileColor', 'char(7)').notNullable();
+        table.specificType('profileColor', 'char(7)').defaultTo('red').notNullable();
         table.timestamps(true, true);
     })
 };
