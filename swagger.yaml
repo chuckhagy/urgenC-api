@@ -10,6 +10,10 @@ tags:
   description: "Working with specific goals here."
 - name: "User"
   description: "All of our beloved users and user-specific endpoints."
+- name: "Authentication"
+  description: "This is how you get a token for later use."
+- name: "Goal-Assignments"
+  description: "This is where we establish a relationship between users and goals."
 # - name: "Message"
 #   description: "Smack-talk central! urgenC is not responsible for this content!"
 schemes:
@@ -22,6 +26,29 @@ securityDefinitions:
 
 paths:
   /goals:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Returns all goals in system (admin only)"
+      description: ""
+      operationId: "getAllGoals"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "All goals returned"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
     post:
       security:
         - Bearer: []
@@ -54,6 +81,7 @@ paths:
           description: "Invalid input"
           schema:
             type: "string"
+
 
   /goals/{goalId}/assignments:
     post:
@@ -358,11 +386,38 @@ paths:
         type: "string"
       responses:
         201:
-          description: "successful operation"
+          description: "successful token  created"
           schema:
             $ref: "#/definitions/Login-token"
         400:
           description: "Invalid username/password supplied"
+  /goal-assignments:
+    post:
+      tags:
+      - "Goal-Assignments"
+      summary: "Create a new assingment (defaults to pending)"
+      description: ""
+      operationId: "createAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Complete goal object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/newAssignment"
+      responses:
+        201:
+          description: "successful addition"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
 
 
 definitions:
@@ -457,6 +512,43 @@ definitions:
         type: "integer"
         format: "int64"
       token:
+        type: "string"
+
+  newAssignment:
+    type: "object"
+    required:
+    - "userId"
+    - "goalId"
+    properties:
+      userId:
+        type: "integer"
+        format: "int64"
+      goalId:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+
+
+  assignment-res:
+    type: "object"
+    required:
+    - "id"
+    - "userId"
+    - "goalId"
+    - "status"
+
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      userId:
+        type: "integer"
+        format: "int64"
+      goalId:
+        type: "integer"
+        format: "int64"
+      status:
         type: "string"
 
   User-res:
