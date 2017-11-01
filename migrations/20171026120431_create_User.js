@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
         table.specificType('displayName', 'char(32)').defaultTo('').notNullable();
         table.text('statusMessage').defaultTo('Hi everyone!');
         table.specificType('email', 'char(60)').unique().notNullable();
-        table.specificType('profileColor', 'char(7)').defaultTo('red').notNullable();
+        table.specificType('profileColor', 'char(7)').defaultTo('#c90000').notNullable();
         table.timestamps(true, true);
     })
 };

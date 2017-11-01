@@ -23,6 +23,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
+
     let authUserId = req.jwt ? req.jwt.payload.sub : undefined;
     if(typeof authUserId === 'number' && authUserId > 0) {
         req.authenticatedUserId = authUserId;
