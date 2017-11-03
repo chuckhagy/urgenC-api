@@ -23,12 +23,16 @@
     "yup": "^0.23.0"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
+    "supertest": "^3.0.0"
   },
   "scripts": {
     "knex": "knex",
     "test": "jest",
-    "start": "nodemon"
+    "start": "nodemon",
+    "test:super": "mocha -u tdd -- ./test/usersTest.js"
   },
   "repository": {
     "type": "git",
