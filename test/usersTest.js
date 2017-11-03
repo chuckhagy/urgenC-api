@@ -33,7 +33,9 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                     .expect(res => {
                         delete res.body[0].created_at;
                         delete res.body[0].updated_at;
-                        console.log('>>>', res.body[0], '<<<')
+
+                        res = res.body[0]
+
                     })
                     .expect(200, [{
                             "displayName": "Chuck Hagy                      ",
