@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">55% </span>
+        <span class="strong">62.3% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>33/60</span>
+        <span class='fraction'>38/61</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">20% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/20</span>
+        <span class='fraction'>4/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">66% </span>
+        <span class="strong">74.51% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>33/50</span>
+        <span class='fraction'>38/51</span>
       </div>
     </div>
   </div>
@@ -132,7 +132,8 @@
 87
 88
 89
-90</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+90
+91</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,19 +195,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,6 +283,7 @@ class EntityController {
             const entity = await this.entityService.updateById(req.params, req.body, req.authenticatedUserId);
             res.status(200).json(entity);
         } catch (error) {
+<span class="cstat-no" title="statement not covered" >            console.log(error)</span>
 <span class="cstat-no" title="statement not covered" >            if(error.message === "PERMISSION_DENIED") <span class="cstat-no" title="statement not covered" >return res.status('403').send('Permission Denied');</span></span>
 <span class="cstat-no" title="statement not covered" >            res.status('500').send('System Error') </span>         }
     }
@@ -290,12 +293,12 @@ class EntityController {
             const newEntity = await this.entityService.create(req.body, req.authenticatedUserId);
             res.status(201).json(newEntity);
         } catch (error) {
-<span class="cstat-no" title="statement not covered" >            if(error.message === "PERMISSION_DENIED") <span class="cstat-no" title="statement not covered" >return res.status('403').send('Permission Denied');</span></span>
-<span class="cstat-no" title="statement not covered" >            if(error.message === "ASSIGNMENT_ALREADY_EXISTS") <span class="cstat-no" title="statement not covered" >return res.status('409').send('This Assignment' +</span></span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(error.message === "PERMISSION_DENIED") <span class="cstat-no" title="statement not covered" >return res.status('403').send('Permission Denied');</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(error.message === "ASSIGNMENT_ALREADY_EXISTS") <span class="cstat-no" title="statement not covered" >return res.status('409').json('This Assignment' +</span>
                 ' Already Exists');
-<span class="cstat-no" title="statement not covered" >            if(error.message === "DUPLICATE_USERNAME") <span class="cstat-no" title="statement not covered" >return res.status('409').send('This username is in use');</span></span>
-<span class="cstat-no" title="statement not covered" >            if(error.message === "DUPLICATE_EMAIL") <span class="cstat-no" title="statement not covered" >return res.status('409').send('This email is in use');</span></span>
-<span class="cstat-no" title="statement not covered" >            res.status('500').send('System Error')</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(error.message === "DUPLICATE_USERNAME") <span class="cstat-no" title="statement not covered" >return res.status('409').send('This username is in use');</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(error.message === "DUPLICATE_EMAIL") <span class="cstat-no" title="statement not covered" >return res.status('409').send('This email is in use');</span>
+            res.status('500').send('System Error')
         }
     }
 &nbsp;
@@ -316,7 +319,7 @@ module.exports = EntityController;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 30 2017 16:32:12 GMT-0700 (PDT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Nov 03 2017 08:44:31 GMT-0700 (PDT)
 </div>
 </div>
 <script src="prettify.js"></script>
