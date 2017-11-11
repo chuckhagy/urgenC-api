@@ -25,7 +25,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         done();
                     })
             });
-            test('get /users', done => {
+            test('GET /users', done => {
 
                 agent.get('/users').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
                     .expect('Content-Type', /json/)
@@ -45,7 +45,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         }],
                         done);
             });
-            test('get /users/ by id', done => {
+            test('GET /users/ by id', done => {
 
                 agent.get('/users/1').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
                     .expect('Content-Type', /json/)
@@ -65,7 +65,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         ,
                         done);
             });
-            test('post /users NEW USER', done => {
+            test('POST /users NEW USER', done => {
 
                 agent.post('/users').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
                     .send({
@@ -90,8 +90,8 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         }
                         ,
                         done);
-            })
-            test('patch /users/ by id', done => {
+            });
+            test('PATCH /users/ by id', done => {
 
                 agent.patch('/users/1').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
                     .send({
@@ -112,6 +112,26 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                             statusMessage: 'yo',
                             email: 'chuckz@gmail.com                                            ',
                             profileColor: '#c90000' }
+                        ,
+                        done);
+            });
+            test('DELETE /users/ by id', done => {
+
+                agent.delete('/users/1').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
+                    .expect('Content-Type', /json/)
+                    .expect(res => {
+                        delete res.body.created_at;
+                        delete res.body.updated_at;
+                    })
+                    .expect(202, {
+                            id: 1,
+                            username: 'chuckhagy                       ',
+                            role: 'admin                           ',
+                            displayName: 'Chuck Hagy                      ',
+                            statusMessage: 'Crushing. It.',
+                            email: 'chuckhagy@gmail.com                                         ',
+                            profileColor: '#c90000'
+                        }
                         ,
                         done);
             });
