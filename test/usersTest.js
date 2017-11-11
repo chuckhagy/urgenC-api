@@ -25,7 +25,6 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         done();
                     })
             });
-
             test('get /users', done => {
 
                 agent.get('/users').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
@@ -45,8 +44,78 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                             "username": "chuckhagy                       "
                         }],
                         done);
+            });
+            test('get /users/ by id', done => {
+
+                agent.get('/users/1').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
+                    .expect('Content-Type', /json/)
+                    .expect(res => {
+                        delete res.body.created_at;
+                        delete res.body.updated_at;
+                    })
+                    .expect(200, {
+                            id: 1,
+                            username: 'chuckhagy                       ',
+                            role: 'admin                           ',
+                            displayName: 'Chuck Hagy                      ',
+                            statusMessage: 'Crushing. It.',
+                            email: 'chuckhagy@gmail.com                                         ',
+                            profileColor: '#c90000'
+                        }
+                        ,
+                        done);
+            });
+            test('post /users NEW USER', done => {
+
+                agent.post('/users').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
+                    .send({
+                        username: 'chuckz',
+                        email: 'chuckz@gmail.com',
+                        password: 'secret',
+                        displayName: 'Chuckz',
+                    })
+                    .expect('Content-Type', /json/)
+                    .expect(res => {
+                        delete res.body.created_at;
+                        delete res.body.updated_at;
+                    })
+                    .expect(201, {
+                            id: 2,
+                            username: 'chuckz                          ',
+                            role: 'basic                           ',
+                            displayName: 'Chuckz                          ',
+                            statusMessage: 'Hi everyone!',
+                            email: 'chuckz@gmail.com                                            ',
+                            profileColor: '#c90000'
+                        }
+                        ,
+                        done);
             })
-            //test()
+            test('patch /users/ by id', done => {
+
+                agent.patch('/users/1').set('Accept', 'application/json').set('Authorization', 'Bearer ' + token)
+                    .send({
+                        statusMessage: 'yo',
+                        email: 'chuckz@gmail.com',
+                        profileColor: '#c90000',
+                        displayName: 'Chuckzz',
+                    })
+                    .expect('Content-Type', /json/)
+                    .expect(res => {
+                        delete res.body.created_at;
+                        delete res.body.updated_at;
+                    })
+                    .expect(200, { id: 1,
+                            username: 'chuckhagy                       ',
+                            role: 'admin                           ',
+                            displayName: 'Chuckzz                         ',
+                            statusMessage: 'yo',
+                            email: 'chuckz@gmail.com                                            ',
+                            profileColor: '#c90000' }
+                        ,
+                        done);
+            });
+
         })
     })
 );
