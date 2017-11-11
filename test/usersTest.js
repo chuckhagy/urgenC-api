@@ -134,6 +134,27 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         },
                         done);
             });
+            test('GET goal assignments /users/userID/goal-assignments by id', done => {
+
+                agent.get('/users/1/goal-assignments').set('Accept', 'application/json').set('Authorization', 'Bearer' +
+                    ' ' + token)
+                    .expect('Content-Type', /json/)
+                    .expect(res => {
+                        delete res.body[0].created_at;
+                        delete res.body[0].updated_at;
+                        delete res.body[0].userAssignments;
+                    })
+                    .expect(200, [ { id: 1,
+                            title: 'Buy a new car                   ',
+                            body: 'N/A',
+                            dueDate: '2017-12-31T16:30:00.000Z                                        ',
+                            priority: 4,
+                            ownerUserId: 1,
+                            userId: 1,
+                            goalId: 1,
+                            status: 'current                         ' } ],
+                        done);
+            });
 
         })
     })
