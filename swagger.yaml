@@ -156,6 +156,36 @@ paths:
           schema:
             type: "string"
 
+  /goals/{goalId}/goal-assignments:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all USERS assigned to a specific goal"
+      description: "This can only be done by associated users, while logged in."
+      operationId: "getGoalAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "The goalId that we are interested in"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
 
   /users:
     get:
@@ -204,6 +234,36 @@ paths:
         400:
           description: "Invalid info supplied"
 
+  /users/{userId}/goal-assignments:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all assignments for a given user"
+      description: "This can only be done by the user, while logged in."
+      operationId: "getUsersAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The userId that owns the requested assignments"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
 
   /users/{userId}:
     get:
@@ -239,6 +299,7 @@ paths:
           description: "Invalid input"
           schema:
             type: "string"
+
 
 
     patch:
@@ -309,6 +370,7 @@ paths:
             type: "string"
 
 
+
   /token:
     post:
       tags:
@@ -365,67 +427,9 @@ paths:
           description: "Invalid input"
           schema:
             type: "string"
-  /goal-assignments/user/{userId}:
-    get:
-      security:
-        - Bearer: []
-      tags:
-      - "Goal-Assignments"
-      summary: "Get all assignments for a given user"
-      description: "This can only be done by the user, while logged in."
-      operationId: "getUsersAssignments"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "userId"
-        in: "path"
-        description: "The userId that owns the requested assignments"
-        required: true
-        type: "integer"
-      responses:
-        200:
-          description: "successful search"
-          schema:
-            $ref: "#/definitions/User-res"
-        404:
-          description: "User not found"
-          schema:
-            type: "string"
-        405:
-          description: "Invalid input"
-          schema:
-            type: "string"
 
-  /goal-assignments/goal/{goalId}:
-    get:
-      security:
-        - Bearer: []
-      tags:
-      - "Goal-Assignments"
-      summary: "Get all USERS assigned to a specific goal"
-      description: "This can only be done by associated users, while logged in."
-      operationId: "getGoalAssignments"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "goalId"
-        in: "path"
-        description: "The goalId that we are interested in"
-        required: true
-        type: "integer"
-      responses:
-        200:
-          description: "successful search"
-          schema:
-            $ref: "#/definitions/User-res"
-        404:
-          description: "User not found"
-          schema:
-            type: "string"
-        405:
-          description: "Invalid input"
-          schema:
-            type: "string"
+
+
 
   /goal-assignments/{assignmentId}:
     patch:
