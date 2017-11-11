@@ -131,8 +131,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                             statusMessage: 'Crushing. It.',
                             email: 'chuckhagy@gmail.com                                         ',
                             profileColor: '#c90000'
-                        }
-                        ,
+                        },
                         done);
             });
 
