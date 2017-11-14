@@ -31,7 +31,8 @@
   "scripts": {
     "knex": "knex",
     "test": "jest",
-    "start": "nodemon",
+    "start": "node .",
+    "start:dev": "nodemon",
     "test:super": "mocha -u tdd -- ./test/usersTest.js"
   },
   "repository": {
