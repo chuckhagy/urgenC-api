@@ -1,0 +1,699 @@
+swagger: "2.0"
+info:
+  description: "Supercharge your life with this powerful goal tracking app!"
+  version: "1.0.0"
+  title: "urgenC Native App"
+host: "localhost:8000"
+basePath: "/"
+tags:
+- name: "Goal"
+  description: "Working with specific goals here."
+- name: "User"
+  description: "All of our beloved users and user-specific endpoints."
+- name: "Authentication"
+  description: "This is how you get a token for later use."
+- name: "Goal-Assignments"
+  description: "This is where we establish a relationship between users and goals."
+# - name: "Message"
+#   description: "Smack-talk central! urgenC is not responsible for this content!"
+schemes:
+- "http"
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+paths:
+  /goals:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Returns all goals in system (admin only)"
+      description: ""
+      operationId: "getAllGoals"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "All goals returned"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+    post:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Add a new goal to the system"
+      description: ""
+      operationId: "addGoal"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postGoalObject"
+        description: "Complete goal object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/Goal-new-req"
+      responses:
+        201:
+          description: "Successful addition"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+
+
+
+  /goals/{goalId}:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Updates an existing goal"
+      description: "Takes in a goal ID as well as its new data"
+      operationId: "updateGoal"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "ID of goal that we are updating"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Complete goal object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/Goal-update-req"
+      responses:
+        200:
+          description: "Successful update"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal"
+      summary: "Deletes an existing goal"
+      description: "Can only be done by the owner"
+      operationId: "deleteGoal"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "Goal id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        202:
+          description: "Successful deletion"
+          schema:
+            $ref: "#/definitions/Goal-res"
+        404:
+          description: "Goal not found"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /goals/{goalId}/goal-assignments:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all USERS assigned to a specific goal"
+      description: "This can only be done by associated users, while logged in."
+      operationId: "getGoalAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "goalId"
+        in: "path"
+        description: "The goalId that we are interested in"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /users:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Returns all users in system (admin only)"
+      description: ""
+      operationId: "getAllUsers"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "All users returned"
+          schema:
+            $ref: "#/definitions/User-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+    post:
+      tags:
+      - "User"
+      summary: "Register new user"
+      description: "The process by which users create their new accounts"
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New user body object"
+        required: true
+        schema:
+          $ref: "#/definitions/User-req"
+      responses:
+        200:
+          description: "Successful registration"
+          schema:
+            $ref: "#/definitions/User-res"
+        400:
+          description: "Invalid info supplied"
+
+  /users/{userId}/goal-assignments:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Get all assignments for a given user"
+      description: "This can only be done by the user, while logged in."
+      operationId: "getUsersAssignments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The userId that owns the requested assignments"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful search"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+  /users/{userId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Get single user by user name"
+      description: ""
+      operationId: "getUserByUsername"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The id of the user whose info we're accessing"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User-res"
+        400:
+          description: "Invalid username supplied"
+          schema:
+            type: "string"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+
+    patch:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Update a single user"
+      description: "This can only be done by the user themselves, when logged in."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "Username that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "New user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User-req"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+      - "User"
+      summary: "Delete user"
+      description: "This can only be done by the user, while logged in."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        202:
+          description: "successful deletion"
+          schema:
+            $ref: "#/definitions/User-res"
+        404:
+          description: "User not found"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+
+  /token:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Log user in and send them back a token if successful"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "User's username"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "successful token  created"
+          schema:
+            $ref: "#/definitions/Login-token"
+        400:
+          description: "Invalid username/password supplied"
+  /goal-assignments:
+    post:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Create a new assingment (defaults to pending)"
+      description: ""
+      operationId: "createAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Complete goal object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/newAssignment"
+      responses:
+        201:
+          description: "successful addition"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+
+
+  /goal-assignments/{assignmentId}:
+    patch:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Updates an existing goal assignment"
+      description: "Takes in an assignment ID as well as its new data"
+      operationId: "updateGoalAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "assignmentId"
+        in: "path"
+        description: "ID of goal assignemnt that we are updating"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Complete or partial goal assignment object that needs to be added"
+        required: true
+        schema:
+            $ref: "#/definitions/newAssignment"
+      responses:
+        200:
+          description: "Successful update"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+      - "Goal-Assignments"
+      summary: "Deletes an existing goal assignment"
+      description: "Takes in an assignment ID"
+      operationId: "deleteGoalAssignment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "assignmentId"
+        in: "path"
+        description: "ID of goal assignemnt that we are updating"
+        required: true
+        type: "integer"
+        format: "int64"
+
+      responses:
+        200:
+          description: "Successful update"
+          schema:
+            $ref: "#/definitions/assignment-res"
+        401:
+          description: "Unauthorized"
+          schema:
+            type: "string"
+        405:
+          description: "Invalid input"
+          schema:
+            type: "string"
+
+
+
+definitions:
+
+  Goal-update-req:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      body:
+        type: "string"
+      dueDate:
+        type: "string"
+      status:
+        type: "string"
+      priority:
+        type: "integer"
+        format: "int64"
+      ownerUserId:
+        type: "integer"
+        format: "int64"
+
+  Goal-new-req:
+    type: "object"
+    required:
+    - "title"
+    - "body"
+    - "dueDate"
+    - "status"
+    - "priority"
+    - "ownerUserId"
+    properties:
+      title:
+        type: "string"
+      body:
+        type: "string"
+      dueDate:
+        type: "string"
+      status:
+        type: "string"
+      priority:
+        type: "integer"
+        format: "int64"
+      ownerUserId:
+        type: "integer"
+        format: "int64"
+
+  Goal-res:
+    type: "object"
+    required:
+    - "id"
+    - "title"
+    - "body"
+    - "status"
+    - "dueDate"
+    - "priority"
+    - "ownerUserId"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      body:
+        type: "string"
+      dueDate:
+        type: "string"
+      status:
+        type: "string"
+      priority:
+        type: "integer"
+        format: "int64"
+      ownerUserId:
+        type: "integer"
+        format: "int64"
+      dateCreated:
+        type: "string"
+
+
+  Login-token:
+    type: "object"
+    required:
+    - "userId"
+    - "token"
+    properties:
+      userId:
+        type: "integer"
+        format: "int64"
+      token:
+        type: "string"
+
+  newAssignment:
+    type: "object"
+    required:
+    - "userId"
+    - "goalId"
+    properties:
+      userId:
+        type: "integer"
+        format: "int64"
+      goalId:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+
+
+  assignment-res:
+    type: "object"
+    required:
+    - "id"
+    - "userId"
+    - "goalId"
+    - "status"
+
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      userId:
+        type: "integer"
+        format: "int64"
+      goalId:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+
+  User-res:
+    type: "object"
+    required:
+    - "id"
+    - "username"
+    - "displayName"
+    - "statusMessage"
+    - "email"
+    - "profileColor"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      displayName:
+        type: "string"
+      statusMessage:
+        type: "string"
+      email:
+        type: "string"
+      profileColor:
+        type: "string"
+
+  User-req:
+    type: "object"
+    required:
+    - "id"
+    - "username"
+    - "password"
+    - "displayName"
+    - "statusMessage"
+    - "email"
+    - "profileColor"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      password:
+        type: "string"
+      displayName:
+        type: "string"
+      statusMessage:
+        type: "string"
+      email:
+        type: "string"
+      profileColor:
+        type: "string"
+
+  assignments-create-req:
+    type: "object"
+    required:
+    - "userId"
+    properties:
+      userId:
+        type: "integer"
+        format: "int64"
