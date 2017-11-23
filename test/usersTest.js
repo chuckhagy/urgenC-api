@@ -14,7 +14,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                 request(server).post('/token')
                     .set('Content-Type', 'application/json')
                     .send({
-                        username: 'chuckhagy',
+                        username: 'chuck',
                         password: 'secret'
                     })
                     .end((error, res) => {
@@ -41,7 +41,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                             "profileColor": "#c90000",
                             "role": "admin                           ",
                             "statusMessage": "Crushing. It.",
-                            "username": "chuckhagy                       "
+                            "username": "chuck                           "
                         }],
                         done);
             });
@@ -55,7 +55,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                     })
                     .expect(200, {
                             id: 1,
-                            username: 'chuckhagy                       ',
+                            username: 'chuck                           ',
                             role: 'admin                           ',
                             displayName: 'Chuck Hagy                      ',
                             statusMessage: 'Crushing. It.',
@@ -106,7 +106,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                         delete res.body.updated_at;
                     })
                     .expect(200, { id: 1,
-                            username: 'chuckhagy                       ',
+                            username: 'chuck                           ',
                             role: 'admin                           ',
                             displayName: 'Chuckzz                         ',
                             statusMessage: 'yo',
@@ -125,7 +125,7 @@ suite('hitting /users endpoint', addDatabaseHooks(() => {
                     })
                     .expect(202, {
                             id: 1,
-                            username: 'chuckhagy                       ',
+                            username: 'chuck                           ',
                             role: 'admin                           ',
                             displayName: 'Chuck Hagy                      ',
                             statusMessage: 'Crushing. It.',
